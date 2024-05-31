@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  background-color: #e9f2f3;
+}
+
 .point-btn {
   font-family: cursive;
   color: #353535;
