@@ -2,6 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
-button {
+.point-btn {
   font-family: cursive;
+  color: #353535;
+  --border-color: white;
+}
+
+.point-btn:nth-of-type(2),
+.point-btn:nth-of-type(8) {
+  border-right: 2px solid var(--border-color);
+  border-left: 2px solid var(--border-color);
+}
+
+.point-btn:nth-of-type(4),
+.point-btn:nth-of-type(6) {
+  border-top: 2px solid var(--border-color);;
+  border-bottom: 2px solid var(--border-color);;
+}
+
+.point-btn:nth-of-type(5) {
+  border: 2px solid var(--border-color);;
+}
+
+.play-btn {
+  border-radius: 12px;
+  padding: 10px 30px;
+  font-size: 20px;
+  margin: 100px auto 0;
+  font-family: sans-serif;
+  box-shadow: 0 0 4px 0px #acacac;
 }

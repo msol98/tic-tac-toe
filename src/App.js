@@ -69,6 +69,7 @@ function App() {
 
   function submitChoice(selectedPoint) {
     const selectedBtn = document.getElementById(selectedPoint.index);
+    if (!!selectedBtn.innerText) return;
     if (isOsTurn) {
       setOPoint(points => [...points, selectedPoint]);
       selectedBtn.innerText = 'O';
@@ -81,20 +82,24 @@ function App() {
 
   useEffect(() => {
     if (oPoint.length >= 3 && checkIfWon(oPoint))
-      setWinner('o');
+      setWinner('O');
   }, [oPoint]);
 
   useEffect(() => {
     if (xPoint.length >= 3 && checkIfWon(xPoint))
-      setWinner('x');
+      setWinner('X');
   }, [xPoint])
 
   return (
-    <div>
-      {!!winner && (<>The winner is <h1>{winner}</h1></>)}
-      <div className='grid grid-cols-3 gap-4 w-40 mx-auto mt-40'>
-        {allPoints.map(point => <button key={point.index} id={point.index} onClick={() => submitChoice(point)} className='w-12 h-12 bg-yellow-500'></button>)}
+    <div className='pt-20'>
+      {!!winner && (<h1 className='text-center text-[22px]'>The winner is <span className='font-bold'>{winner}</span></h1>)}
+      {!winner && <h2 className='text-center text-[20px]'><span className='font-bold'>{isOsTurn ? 'O' : 'X'}</span>'s turn</h2>}
+      <div className='grid grid-cols-3 w-36 mx-auto mt-20'>
+        {allPoints.map(point => <button key={point.index} id={point.index} onClick={() => submitChoice(point)} className='point-btn w-12 h-12 bg-yellow-400 hover:bg-yellow-500'></button>)}
       </div>
+      {!!winner && <button className='play-btn block bg-cyan-500 text-white'>Play again!</button>}
+      {!winner && <button className='play-btn block hover:bg-cyan-500 text-cyan-700 hover:text-white border border-cyan-500 hover:border-transparent'>Retry</button>}
+
     </div>
   );
 }
