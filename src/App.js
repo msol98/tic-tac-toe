@@ -56,15 +56,22 @@ function App() {
     }
   ]
 
+  function getWinRules(pointsArr) {
+    const winRules = [
+      pointsArr.filter(point => point.x === pointsArr[0].x)?.length === 3,
+      pointsArr.filter(point => point.y === pointsArr[0].y)?.length === 3,
+      pointsArr.filter(point => point.x + point.y === 2)?.length === 3,
+      pointsArr.filter(point => point.x === point.y)?.length === 3
+    ];
+    return winRules;
+  }
+
   function checkIfWon(pointsArr) {
-    const con1 = pointsArr.filter(point => point.x === pointsArr[0].x)?.length === 3;
-    if (con1) return true;
-    const con2 = pointsArr.filter(point => point.y === pointsArr[0].y)?.length === 3;
-    if (con2) return true;
-    const con3 = pointsArr.filter(point => point.x + point.y === 2)?.length === 3;
-    if (con3) return true;
-    const con4 = pointsArr.filter(point => point.x === point.y)?.length === 3;
-    return con4;
+    const winRules = getWinRules(pointsArr);
+    for (let i = 0; i < winRules.length; i++) {
+      if (!!winRules[i])
+        return true;
+    };
   }
 
   function submitChoice(selectedPoint) {
@@ -94,7 +101,8 @@ function App() {
       setWinner('X');
     else if (oPoint.length + xPoint.length === 9)
       setWinner('Nobody');
-    setIsOsTurn(turn => !turn);
+    if (oPoint.length + xPoint.length > 0)
+      setIsOsTurn(turn => !turn);
   }, [xPoint, oPoint])
 
   return (
