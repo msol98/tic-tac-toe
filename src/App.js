@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import './App.css';
+import { connect } from 'react-redux';
+import { oPlay, reset, xPlay } from './actions/tic-tac-toe';
 
-function App() {
+function App({ dispatch, oPoints, xPoints }) { // todo: highlight the buttons that made winner win the game
 
   const [isOsTurn, setIsOsTurn] = useState(true);
-  const [oPoint, setOPoint] = useState([]);
-  const [xPoint, setXPoint] = useState([]);
   const [winner, setWinner] = useState(null);
 
   const allPoints = [
@@ -78,32 +78,31 @@ function App() {
     const selectedBtn = document.getElementById(selectedPoint.index);
     if (!!selectedBtn.innerText) return;
     if (isOsTurn) {
-      setOPoint(points => [...points, selectedPoint]);
+      dispatch(oPlay(selectedPoint));
       selectedBtn.innerText = 'O';
     } else {
-      setXPoint(points => [...points, selectedPoint]);
+      dispatch(xPlay(selectedPoint));
       selectedBtn.innerText = 'X';
     }
   }
 
   function resetGame() {
     setIsOsTurn(true);
-    setOPoint([]);
-    setXPoint([]);
+    dispatch(reset());
     setWinner(null);
     document.querySelectorAll('.point-btn').forEach(btn => btn.innerText = '');
   }
 
   useEffect(() => {
-    if (isOsTurn && oPoint.length >= 3 && checkIfWon(oPoint))
+    if (isOsTurn && oPoints.length >= 3 && checkIfWon(oPoints))
       setWinner('O');
-    else if (!isOsTurn && xPoint.length >= 3 && checkIfWon(xPoint))
+    else if (!isOsTurn && xPoints.length >= 3 && checkIfWon(xPoints))
       setWinner('X');
-    else if (oPoint.length + xPoint.length === 9)
+    else if (oPoints.length + xPoints.length === 9)
       setWinner('Nobody');
-    if (oPoint.length + xPoint.length > 0)
+    if (oPoints.length + xPoints.length > 0)
       setIsOsTurn(turn => !turn);
-  }, [xPoint, oPoint])
+  }, [xPoints, oPoints])
 
   return (
     <div className='pt-28'>
@@ -118,4 +117,10 @@ function App() {
   );
 }
 
-export default App;
+const mapPropsToState = (state = {oPoints: [], xPoints: []}) => {
+  return {
+    oPoints: state.oPoints,
+    xPoints: state.xPoints,
+  }
+}
+export default connect(mapPropsToState)(App);
