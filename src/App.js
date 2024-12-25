@@ -56,22 +56,17 @@ function App({ dispatch, oPoints, xPoints }) { // todo: highlight the buttons th
     }
   ]
 
-  function getWinRules(pointsArr) {
-    const winRules = [
+  function getWinPossibilities(pointsArr) {
+    return [
       pointsArr.filter(point => point.x === pointsArr[0].x)?.length === 3,
       pointsArr.filter(point => point.y === pointsArr[0].y)?.length === 3,
       pointsArr.filter(point => point.x + point.y === 2)?.length === 3,
       pointsArr.filter(point => point.x === point.y)?.length === 3
     ];
-    return winRules;
   }
 
   function checkIfWon(pointsArr) {
-    const winRules = getWinRules(pointsArr);
-    for (let i = 0; i < winRules.length; i++) {
-      if (!!winRules[i])
-        return true;
-    };
+    return getWinPossibilities(pointsArr).some(possibility => possibility == true);
   }
 
   function submitChoice(selectedPoint) {
@@ -111,7 +106,7 @@ function App({ dispatch, oPoints, xPoints }) { // todo: highlight the buttons th
       <div className='grid grid-cols-3 w-36 mx-auto mt-20'>
         {allPoints.map(point => <button disabled={!!winner} key={point.index} id={point.index} onClick={() => submitChoice(point)} className='point-btn w-12 h-12 bg-yellow-400 hover:bg-yellow-500'></button>)}
       </div>
-      {!!winner && <button onClick={resetGame} className='play-btn block bg-cyan-500 text-white'>Play again!</button>}
+      {!!winner && <button onClick={resetGame} className='play-btn block bg-cyan-500 text-white'>Play again</button>}
       {!winner && <button onClick={resetGame} className='play-btn block bg-white hover:bg-cyan-500 text-cyan-700 hover:text-white border border-cyan-500 hover:border-transparent'>Retry</button>}
     </div>
   );
