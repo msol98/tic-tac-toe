@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import { oPlay, xPlay, reset } from './actions/tic-tac-toe';
@@ -20,18 +19,8 @@ function App({ dispatch, turn, winner }) { // todo: highlight the buttons that m
 
   function resetGame() {
     dispatch(reset());
-    setWinner(null);
     document.querySelectorAll('.point-btn').forEach(btn => btn.innerText = '');
   }
-
-  useEffect(() => {
-    if (turn == 'x' && oPoints.length >= 3 && checkIfWon(oPoints))
-      setWinner('O');
-    else if (turn == 'o' && xPoints.length >= 3 && checkIfWon(xPoints))
-      setWinner('X');
-    else if (oPoints.length + xPoints.length === 9)
-      setWinner('Nobody');
-  }, turn)
 
   return (
     <div className='pt-28'>
@@ -51,6 +40,7 @@ const mapPropsToState = (state = { oPoints: [], xPoints: [], turn: 'o' }) => {
     turn: state.turn,
     oPoints: state.oPoints,
     xPoints: state.xPoints,
+    winner: state.winner
   }
 }
 export default connect(mapPropsToState)(App);
