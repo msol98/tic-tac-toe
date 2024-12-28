@@ -3,9 +3,8 @@ import './App.css';
 import { connect } from 'react-redux';
 import { oPlay, reset, xPlay } from './actions/tic-tac-toe';
 
-function App({ dispatch, oPoints, xPoints }) { // todo: highlight the buttons that made winner win the game
+function App({ dispatch, turn, oPoints, xPoints }) { // todo: highlight the buttons that made winner win the game
 
-  const [isOsTurn, setIsOsTurn] = useState(true);
   const [winner, setWinner] = useState(null);
 
   const allPoints = [
@@ -72,7 +71,7 @@ function App({ dispatch, oPoints, xPoints }) { // todo: highlight the buttons th
   function submitChoice(selectedPoint) {
     const selectedBtn = document.getElementById(selectedPoint.index);
     if (!!selectedBtn.innerText) return;
-    if (isOsTurn) {
+    if (turn == 'o') {
       dispatch(oPlay(selectedPoint));
       selectedBtn.innerText = 'O';
     } else {
@@ -82,27 +81,24 @@ function App({ dispatch, oPoints, xPoints }) { // todo: highlight the buttons th
   }
 
   function resetGame() {
-    setIsOsTurn(true);
     dispatch(reset());
     setWinner(null);
     document.querySelectorAll('.point-btn').forEach(btn => btn.innerText = '');
   }
 
   useEffect(() => {
-    if (isOsTurn && oPoints.length >= 3 && checkIfWon(oPoints))
+    if (turn == 'x' && oPoints.length >= 3 && checkIfWon(oPoints))
       setWinner('O');
-    else if (!isOsTurn && xPoints.length >= 3 && checkIfWon(xPoints))
+    else if (turn == 'o' && xPoints.length >= 3 && checkIfWon(xPoints))
       setWinner('X');
     else if (oPoints.length + xPoints.length === 9)
       setWinner('Nobody');
-    if (oPoints.length + xPoints.length > 0)
-      setIsOsTurn(turn => !turn);
   }, [xPoints, oPoints])
 
   return (
     <div className='pt-28'>
       {!!winner && (<h1 className='text-center text-[22px]'><span className='font-bold'>{winner}</span> won</h1>)}
-      {!winner && <h2 className='text-center text-[20px]'><span className='font-bold'>{isOsTurn ? 'O' : 'X'}</span>'s turn</h2>}
+      {!winner && <h2 className='text-center text-[20px]'><span className='font-bold'>{turn}</span>'s turn</h2>}
       <div className='grid grid-cols-3 w-36 mx-auto mt-20'>
         {allPoints.map(point => <button disabled={!!winner} key={point.index} id={point.index} onClick={() => submitChoice(point)} className='point-btn w-12 h-12 bg-yellow-400 hover:bg-yellow-500'></button>)}
       </div>
@@ -112,8 +108,9 @@ function App({ dispatch, oPoints, xPoints }) { // todo: highlight the buttons th
   );
 }
 
-const mapPropsToState = (state = {oPoints: [], xPoints: []}) => {
+const mapPropsToState = (state = { oPoints: [], xPoints: [], turn: 'o' }) => {
   return {
+    turn: state.turn,
     oPoints: state.oPoints,
     xPoints: state.xPoints,
   }
