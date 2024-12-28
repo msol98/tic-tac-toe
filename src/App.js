@@ -1,72 +1,10 @@
 import { useEffect, useState } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { oPlay, reset, xPlay } from './actions/tic-tac-toe';
+import { oPlay, xPlay, reset } from './actions/tic-tac-toe';
+import { allPoints } from './constants/tic-tac-toe';
 
-function App({ dispatch, turn, oPoints, xPoints }) { // todo: highlight the buttons that made winner win the game
-
-  const [winner, setWinner] = useState(null);
-
-  const allPoints = [
-    {
-      index: 0,
-      x: 0,
-      y: 0
-    },
-    {
-      index: 1,
-      x: 0,
-      y: 1
-    },
-    {
-      index: 2,
-      x: 0,
-      y: 2
-    },
-    {
-      index: 3,
-      x: 1,
-      y: 0
-    },
-    {
-      index: 4,
-      x: 1,
-      y: 1
-    },
-    {
-      index: 5,
-      x: 1,
-      y: 2
-    },
-    {
-      index: 6,
-      x: 2,
-      y: 0
-    },
-    {
-      index: 7,
-      x: 2,
-      y: 1
-    },
-    {
-      index: 8,
-      x: 2,
-      y: 2
-    }
-  ]
-
-  function getWinPossibilities(pointsArr) {
-    return [
-      pointsArr.filter(point => point.x === pointsArr[0].x)?.length === 3,
-      pointsArr.filter(point => point.y === pointsArr[0].y)?.length === 3,
-      pointsArr.filter(point => point.x + point.y === 2)?.length === 3,
-      pointsArr.filter(point => point.x === point.y)?.length === 3
-    ];
-  }
-
-  function checkIfWon(pointsArr) {
-    return getWinPossibilities(pointsArr).some(possibility => possibility == true);
-  }
+function App({ dispatch, turn, winner }) { // todo: highlight the buttons that made winner win the game
 
   function submitChoice(selectedPoint) {
     const selectedBtn = document.getElementById(selectedPoint.index);
@@ -93,7 +31,7 @@ function App({ dispatch, turn, oPoints, xPoints }) { // todo: highlight the butt
       setWinner('X');
     else if (oPoints.length + xPoints.length === 9)
       setWinner('Nobody');
-  }, [xPoints, oPoints])
+  }, turn)
 
   return (
     <div className='pt-28'>

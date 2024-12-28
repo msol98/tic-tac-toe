@@ -1,3 +1,5 @@
+import { getWinPossibilities } from "../constants/tic-tac-toe";
+
 export default (state = { oPoints: [], xPoints: [], turn: 'o' }, action) => {
   switch (action.type) {
     case 'O_PLAY':
